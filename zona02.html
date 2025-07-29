@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona02 - Equipo de Microfútbol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .team-header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 10px;
+        }
+
+        .team-logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 2px 2px 4px rgba(255,0,0,0.5);
+        }
+
+        .team-shield {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            background: url('zona02.png') center/contain no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shield-placeholder-text {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #ff0000;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .team-subtitle {
+            font-size: 1.5rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .team-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .players-section {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff0000;
+            text-shadow: 1px 1px 2px rgba(255,0,0,0.5);
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .player-card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,0,0,0.3);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #ffffff);
+        }
+
+        .player-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff0000;
+            opacity: 0.7;
+        }
+
+        .player-info {
+            margin-top: 10px;
+        }
+
+        .player-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .player-alias {
+            font-size: 1.1rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .player-position {
+            display: inline-block;
+            background: rgba(255,0,0,0.2);
+            color: #ff0000;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #ff0000;
+        }
+
+        .formation-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .field {
+            background: linear-gradient(45deg, #2d5a27 0%, #4a7c59 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 600px;
+            position: relative;
+            border: 3px solid white;
+        }
+
+        .field::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: white;
+            transform: translateY(-50%);
+        }
+
+        .field::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .field-positions {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr;
+            height: 300px;
+            gap: 20px;
+        }
+
+        .field-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .field-player {
+            width: 60px;
+            height: 60px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+        }
+
+        .field-player:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,0,0,0.5);
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff0000, #ffffff);
+            color: #000000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+        }
+
+        .substitutes {
+            margin-top: 40px;
+        }
+
+        .substitute-title {
+            font-size: 1.8rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .team-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .field {
+                padding: 20px;
+            }
+            
+            .field-positions {
+                height: 250px;
+            }
+            
+            .field-player {
+                width: 50px;
+                height: 50px;
+                font-size: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #000000;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid #ff0000;
+            position: relative;
+        }
+
+        .close {
+            color: #ff0000;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        .modal-player-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #1e3c72;
+            font-weight: bold;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0,255,136,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-player-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>') center/60px no-repeat;
+            opacity: 0.3;
+        }
+
+        .modal-player-number {
+            font-size: 3rem;
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .modal-player-name {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-player-alias {
+            font-size: 1.5rem;
+            color: #00ff88;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .modal-player-details {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .detail-label {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .photo-placeholder-text {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #00ff88;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="team-header-container">
+                <div class="team-shield">
+                </div>
+                <div class="team-logo">ZONA02</div>
+            </div>
+            <div class="team-subtitle">Equipo de Microfútbol</div>
+            <div class="team-stats">
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Jugadores</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Titulares</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Suplentes</div>
+                </div>
+            </div>
+        </header>
+
+        <section class="players-section">
+            <h2 class="section-title">Jugadores Titulares 🤩</h2>
+            <div class="players-grid" id="titularesGrid">
+                <div class="player-card" onclick="showPlayerModal('00', 'Luis Fernando Acuña', 'L.Acuña')">
+                    <div class="player-number">#00</div>
+                    <div class="player-info">
+                        <div class="player-name">Luis Fernando Acuña</div>
+                        <div class="player-alias">"L.Acuña"</div>
+                        <div class="player-position">Delantero</div>
+                    </div>
+                </div>
+                <div class="player-card" onclick="showPlayerModal('01', 'Camilo Fernandez', 'Camilo')">
+                    <div class="player-number">#01</div>
+                    <div class="player-info">
+                        <div class="player-name">Camilo Fernandez</div>
+                        <div class="player-alias">"Camilo"</div>
+                        <div class="player-position">Portero</div>
+                    </div>
+                </div>
+                <div class="player-card" onclick="showPlayerModal('02', 'Jhon Jairo Ferreira', 'J.Ferreira')">
+                    <div class="player-number">#02</div>
+                    <div class="player-info">
+                        <div class="player-name">Jhon Jairo Ferreira</div>
+                        <div class="player-alias">"J.Ferreira"</div>
+                        <div class="player-position">Defensa</div>
+                    </div>
+                </div>
+                <div class="player-card" onclick="showPlayerModal('08', 'Luis Diaz', 'L.Diaz')">
+                    <div class="player-number">#08</div>
+                    <div class="player-info">
+                        <div class="player-name">Luis Diaz</div>
+                        <div class="player-alias">"L.Diaz"</div>
+                        <div class="player-position">Centrocampista</div>
+                    </div>
+                </div>
+                <div class="player-card" onclick="showPlayerModal('07', 'Erickson Torres', 'E.Torres')">
+                    <div class="player-number">#07</div>
+                    <div class="player-info">
+                        <div class="player-name">Erickson Torres</div>
+                        <div class="player-alias">"E.Torres"</div>
+                        <div class="player-position">Delantero</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="substitutes">
+                <h3 class="substitute-title">Jugadores Suplentes 😃</h3>
+                <div class="players-grid" id="suplentesGrid">
+                    <div class="player-card" onclick="showPlayerModal('09', 'Kevin Samuel Moreno', 'K.Moreno')">
+                        <div class="player-number">#09</div>
+                        <div class="player-info">
+                            <div class="player-name">Kevin Samuel Moreno</div>
+                            <div class="player-alias">"K.Moreno"</div>
+                            <div class="player-position">Centrocampista</div>
+                        </div>
+                    </div>
+                    <div class="player-card" onclick="showPlayerModal('10', 'Daniel Orozco', 'Morocho')">
+                        <div class="player-number">#10</div>
+                        <div class="player-info">
+                            <div class="player-name">Daniel Orozco</div>
+                            <div class="player-alias">"Morocho"</div>
+                            <div class="player-position">Defensa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="formation-section">
+            <h2 class="section-title">Formación en Cancha</h2>
+            <div class="field">
+                <div class="field-positions">
+                    <div class="field-row">
+                        <div class="field-player" onclick="showPlayerModal('00', 'Luis Fernando Acuña', 'L.Acuña')">00</div>
+                        <div class="field-player" onclick="showPlayerModal('07', 'Erickson Torres', 'E.Torres')">07</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-player" onclick="showPlayerModal('08', 'Luis Diaz', 'L.Diaz')">08</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-player" onclick="showPlayerModal('02', 'Jhon Jairo Ferreira', 'J.Ferreira')">02</div>
+                        <div class="field-player" onclick="showPlayerModal('01', 'Camilo Fernandez', 'Camilo')">01</div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="rotateFormation()">🔄 Rotar Formación</button>
+                <button class="btn" onclick="randomizePositions()">🎲 Posiciones Aleatorias</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para mostrar detalles del jugador -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-player-photo" id="modalPhoto">
+                <span id="modalPhotoNumber"></span>
+                <div class="photo-placeholder-text">Agregar foto aquí</div>
+            </div>
+            <div class="modal-player-number" id="modalNumber"></div>
+            <div class="modal-player-name" id="modalName"></div>
+            <div class="modal-player-alias" id="modalAlias"></div>
+            <div class="modal-player-details">
+                <div class="detail-item">
+                    <span class="detail-label">Posición:</span> <span id="modalPosition"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Número:</span> <span id="modalNumberDetail"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Estado:</span> <span id="modalStatus"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de los jugadores
+        const players = {
+            titulares: [
+                { number: '00', name: 'Luis Fernando Acuña', alias: 'L.Acuña', position: 'Delantero' },
+                { number: '01', name: 'Camilo Fernandez', alias: 'Camilo', position: 'Portero' },
+                { number: '02', name: 'Jhon Jairo Ferreira', alias: 'J.Ferreira', position: 'Defensa' },
+                { number: '08', name: 'Luis Diaz', alias: 'L.Diaz', position: 'Centrocampista' },
+                { number: '07', name: 'Erickson Torres', alias: 'E.Torres', position: 'Delantero' }
+            ],
+            suplentes: [
+                { number: '09', name: 'Kevin Samuel Moreno', alias: 'K.Moreno', position: 'Centrocampista' },
+                { number: '10', name: 'Daniel Orozco', alias: 'Morocho', position: 'Defensa' }
+            ]
+        };
+
+        // Función para mostrar el modal del jugador
+        function showPlayerModal(number, name, alias) {
+            // Buscar información del jugador
+            let playerInfo = null;
+            let status = '';
+            
+            // Buscar en titulares
+            playerInfo = players.titulares.find(p => p.number === number);
+            if (playerInfo) {
+                status = 'Titular';
+            } else {
+                // Buscar en suplentes
+                playerInfo = players.suplentes.find(p => p.number === number);
+                status = 'Suplente';
+            }
+            
+            // Actualizar modal
+            document.getElementById('modalPhotoNumber').textContent = number;
+            document.getElementById('modalNumber').textContent = '#' + number;
+            document.getElementById('modalName').textContent = name;
+            document.getElementById('modalAlias').textContent = '"' + alias + '"';
+            document.getElementById('modalPosition').textContent = playerInfo ? playerInfo.position : 'N/A';
+            document.getElementById('modalNumberDetail').textContent = '#' + number;
+            document.getElementById('modalStatus').textContent = status;
+            document.getElementById('playerModal').style.display = 'block';
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('playerModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('playerModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Función para rotar la formación
+        function rotateFormation() {
+            const fieldPlayers = document.querySelectorAll('.field-player');
+            const numbers = Array.from(fieldPlayers).map(player => player.textContent);
+            
+            // Rotar los números
+            const rotated = [numbers[numbers.length - 1], ...numbers.slice(0, -1)];
+            
+            fieldPlayers.forEach((player, index) => {
+                player.textContent = rotated[index];
+                player.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    player.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }
+
+        // Función para posiciones aleatorias
+        function randomizePositions() {
+            const fieldPlayers = document.querySelectorAll('.field-player');
+            const numbers = ['00', '01', '02', '07', '08'];
+            const shuffled = numbers.sort(() => Math.random() - 0.5);
+            
+            fieldPlayers.forEach((player, index) => {
+                player.style.transform = 'rotate(360deg) scale(1.2)';
+                setTimeout(() => {
+                    player.textContent = shuffled[index];
+                    player.style.transform = 'rotate(0deg) scale(1)';
+                }, 300);
+            });
+        }
+
+        // Animación de entrada para las tarjetas
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.player-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Efectos de hover mejorados
+        document.querySelectorAll('.player-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'966fe66ea4380ce3',t:'MTc1MzgyNjU0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
